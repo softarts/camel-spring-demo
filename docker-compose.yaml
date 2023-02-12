@@ -1,0 +1,21 @@
+version: "3.2"
+volumes:
+  mqData:
+networks:
+  backend:
+
+services:
+  ibmmq:
+    image: icr.io/ibm-messaging/mq:latest
+    container_name: ibmmq
+    ports:
+      - 9443:9443
+      - 1414:1414
+    volumes:
+      - mqData:/mnt/mqm
+    environment:
+      LICENSE: accept
+      MQ_QMGR_NAME: QM1
+      MQ_APP_PASSWORD: passw0rd
+    networks:
+      - backend%

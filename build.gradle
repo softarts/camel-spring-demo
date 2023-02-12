@@ -1,0 +1,64 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+buildscript {
+	ext {
+		camelVersion = "4.0.0-M1"
+		mqJmsVersion = "3.0.2"
+		jakartaVersion = "10.0.0"
+	}
+}
+plugins {
+	id 'org.springframework.boot' version '3.0.2'
+	id 'io.spring.dependency-management' version '1.1.0'
+	id 'org.jetbrains.kotlin.jvm' version '1.7.22'
+	id 'org.jetbrains.kotlin.plugin.spring' version '1.7.22'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+	mavenCentral()
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.apache.camel.springboot:camel-spring-boot-bom:$camelVersion"
+		//mavenBom "jakarta.platform:jakarta.jakartaee-bom:$jakartaVersion"
+	}
+}
+dependencies {
+	implementation(
+			'org.apache.camel.springboot:camel-spring-boot-starter',
+			'org.jetbrains.kotlin:kotlin-reflect',
+			'org.jetbrains.kotlin:kotlin-stdlib-jdk8',
+			"com.ibm.mq:mq-jms-spring-boot-starter:$mqJmsVersion",
+			"org.apache.camel:camel-jms:$camelVersion",
+			//"jakarta.platform:jakarta.jakartaee-api:$jakartaVersion",
+
+
+			// https://mvnrepository.com/artifact/javax.jms/javax.jms-api
+			"javax.jms:javax.jms-api:2.0.1",
+//			"org.apache.camel.springboot:camel-http-starter",
+//			"org.apache.camel.springboot:camel-jackson-starter",
+//			'org.springframework.boot:spring-boot-starter-web',
+//			'org.apache.camel.springboot:camel-servlet-starter',
+//			// https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
+//			'javax.servlet:javax.servlet-api:4.0.1',
+			// 'org.apache.camel.springboot:camel-swagger-java-starter', // api-doc
+
+	)
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.withType(KotlinCompile) {
+	kotlinOptions {
+		freeCompilerArgs = ['-Xjsr305=strict']
+		jvmTarget = '17'
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
