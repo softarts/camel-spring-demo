@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 buildscript {
 	ext {
 		camelVersion = "4.0.0-M1"
-		mqJmsVersion = "3.0.2"
+		mqJmsVersion = "3.0.2"  // for JDK17
 		jakartaVersion = "10.0.0"
 	}
 }
@@ -24,7 +24,6 @@ repositories {
 dependencyManagement {
 	imports {
 		mavenBom "org.apache.camel.springboot:camel-spring-boot-bom:$camelVersion"
-		//mavenBom "jakarta.platform:jakarta.jakartaee-bom:$jakartaVersion"
 	}
 }
 dependencies {
@@ -34,19 +33,11 @@ dependencies {
 			'org.jetbrains.kotlin:kotlin-stdlib-jdk8',
 			"com.ibm.mq:mq-jms-spring-boot-starter:$mqJmsVersion",
 			"org.apache.camel:camel-jms:$camelVersion",
-			//"jakarta.platform:jakarta.jakartaee-api:$jakartaVersion",
-
-
-			// https://mvnrepository.com/artifact/javax.jms/javax.jms-api
+			// prefer jms-api only, jakartaee brings too much libs
 			"javax.jms:javax.jms-api:2.0.1",
-//			"org.apache.camel.springboot:camel-http-starter",
-//			"org.apache.camel.springboot:camel-jackson-starter",
-//			'org.springframework.boot:spring-boot-starter-web',
-//			'org.apache.camel.springboot:camel-servlet-starter',
-//			// https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
-//			'javax.servlet:javax.servlet-api:4.0.1',
-			// 'org.apache.camel.springboot:camel-swagger-java-starter', // api-doc
-
+			// "jakarta.platform:jakarta.jakartaee-api:$jakartaVersion",
+			// here use spring-web to keep camel context alive, otherwise we need to explicitly start camel context
+			"org.springframework.boot:spring-boot-starter-web",
 	)
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

@@ -11,13 +11,9 @@ class JMSRouteBuilder : RouteBuilder() {
         log.info("configure JMSRouteBuilder")
         from("jmsComponent:queue:DEV.QUEUE.1")
             .process { exchange -> println(exchange.getIn().body) }
+            .process(JmsMessageProcessor())
+            .transform()
+            .method("jmstransformer", "doTransform")
             .to("jmsComponent:queue:DEV.QUEUE.2")
-
-//        from("jmsComponent:queue:DEV.QUEUE.1")
-//            .process { exchange -> println(exchange.getIn().body) }
-//            .process(JmsMessageProcessor())
-//            .transform()
-//            .method("jmstransformer", "doTransform")
-//            .to("jmsComponent:queue:DEV.QUEUE.2")
     }
 }

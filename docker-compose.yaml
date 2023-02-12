@@ -18,4 +18,4 @@ services:
       MQ_QMGR_NAME: QM1
       MQ_APP_PASSWORD: passw0rd
     networks:
-      - backend%
+      - backend
